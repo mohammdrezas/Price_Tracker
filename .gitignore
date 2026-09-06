@@ -1,0 +1,21 @@
+﻿# Python virtual environment
+.venv/
+venv/
+
+# Python cache
+__pycache__/
+*.pyc
+
+# Secrets (telegram token, etc.)
+.env
+
+# Local database
+*.db
+*.sqlite3
+
+# Editor settings
+.vscode/
+.idea/
+
+# Windows system files
+Thumbs.db
