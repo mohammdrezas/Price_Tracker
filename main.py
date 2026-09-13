@@ -8,12 +8,15 @@ products = connection.execute("SELECT id, url FROM products WHERE is_active = 1"
 for product in products:
     product_id = product[0]
     url = product[1]
-    data = scrape_product(url)
-    connection.execute(
-        "INSERT INTO price_history (product_id, price, in_stock) VALUES (?, ?, ?)",
-        (product_id, data["price"], data["in_stock"])
-    )
-    print("Saved:", data)
+    try:
+        data = scrape_product(url)
+        connection.execute(
+            "INSERT INTO price_history (product_id, price, in_stock) VALUES (?, ?, ?)",
+            (product_id, data["price"], data["in_stock"])
+        )
+        print("Saved:", data)
+    except Exception as e:
+        print(f"failed for product {product_id}: {e}")
 
 connection.commit()
 connection.close()
