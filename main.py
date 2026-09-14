@@ -3,13 +3,14 @@ from scraper.scraper import scrape_product
 
 connection = sqlite3.connect("database/price_tracker.db")
 
-products = connection.execute("SELECT id, url FROM products WHERE is_active = 1").fetchall()
+products = connection.execute("SELECT id, url, store FROM products WHERE is_active = 1").fetchall()
 
 for product in products:
     product_id = product[0]
     url = product[1]
+    store = product[2]
     try:
-        data = scrape_product(url)
+        data = scrape_product(url, store)
         connection.execute(
             "INSERT INTO price_history (product_id, price, in_stock) VALUES (?, ?, ?)",
             (product_id, data["price"], data["in_stock"])
