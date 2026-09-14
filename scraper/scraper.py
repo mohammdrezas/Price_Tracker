@@ -1,4 +1,5 @@
-import requests
+import asyncio
+import aiohttp
 from bs4 import BeautifulSoup
 from processing.clean import clean_price, clean_stock
 
@@ -28,14 +29,22 @@ PARSERS = {
     "xgames": parse_xgames,
 }
 
-def scrape_product(url, store):
-    response = requests.get(url, headers={'User-Agent': 'Mozilla/5.0'}, timeout=30)
-    soup = BeautifulSoup(response.text, 'html.parser')
+async def scrape_product(session, url, store):
+    async with session.get(url, headers={'User-Agent': 'Mozilla/5.0'}) as response:
+        html = await response.text()
+    soup = BeautifulSoup(html, 'html.parser')
     parser = PARSERS[store]
     name, final_price, stock = parser(soup)
     final_stock = clean_stock(stock)
     return {"name": name, "price": final_price, "in_stock": final_stock}
 
+async def main():
+    async with aiohttp.ClientSession() as session:
+        result1 = await scrape_product(session, "https://game-center.ir/product/resident-evil-requiem/", "game-center")
+        print(result1)
+        result2 = await scrape_product(session, "https://xgamesstore.org/product/ea-sports-fc-26/", "xgames")
+        print(result2)
+
+
 if __name__ == "__main__":
-    print(scrape_product("https://game-center.ir/product/resident-evil-requiem/", "game-center"))
-    print(scrape_product("https://xgamesstore.org/product/ea-sports-fc-26/", "xgames"))
+    asyncio.run(main())
