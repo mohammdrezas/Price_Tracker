@@ -2,6 +2,8 @@ import asyncio
 import aiohttp
 import sqlite3
 from scraper.scraper import scrape_product
+from analysis.analyze import find_price_drops
+from notifier.notify import send_alerts
 
 
 async def scrape_one(session, product):
@@ -35,6 +37,10 @@ async def main():
             print("Saved:", data)
 
     connection.commit()
+
+    drops = find_price_drops(connection)
+    send_alerts(drops)
+
     connection.close()
 
 
