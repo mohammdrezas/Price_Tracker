@@ -1,10 +1,30 @@
+import os
+import requests
+from dotenv import load_dotenv
+
+load_dotenv()
+TELEGRAM_TOKEN = os.getenv("TELEGRAM_TOKEN")
+TELEGRAM_CHAT_ID = os.getenv("TELEGRAM_CHAT_ID")
+
+def send_telegram(message):
+    url = f"https://api.telegram.org/bot{TELEGRAM_TOKEN}/sendMessage"
+    requests.post(url, data={"chat_id": TELEGRAM_CHAT_ID, "text": message})
+
+def send_terminal(message):
+    print(message)
+
+SENDERS = {
+    "terminal": send_terminal,
+    "telegram": send_telegram,
+}
 
 def send_alerts(drops):
     if not drops:
-        print("هیچ افتی یافت نشد")
         return
     for drop in drops:
-        print(f"قیمت {drop['name']} افت کرد! الان {drop['latest']} تومان. اخیر {drop['average']} تومان")
+        message = f"قیمت {drop['name']} افت کرد! الان {drop['latest']} تومان. اخیر {drop['average']} تومان"
+        for sender in SENDERS.values():
+            sender(message)
 
 if __name__ == "__main__":
     sample = [
