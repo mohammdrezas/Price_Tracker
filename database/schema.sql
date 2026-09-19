@@ -1,4 +1,4 @@
-create table products (
+create table if not exists products (
     id integer primary key,
     name text not null,
     platform text not null,
@@ -7,7 +7,7 @@ create table products (
     is_active integer not null default 1
 );
 
-create table price_history (
+create table if not exists price_history (
     id integer primary key,
     product_id integer not null references products(id),
     price integer,

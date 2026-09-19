@@ -4,6 +4,7 @@ import sqlite3
 from scraper.scraper import scrape_product
 from analysis.analyze import find_price_drops
 from notifier.notify import send_alerts
+from config import DB_PATH
 
 
 async def scrape_one(session, product):
@@ -19,7 +20,7 @@ async def scrape_one(session, product):
 
 
 async def main():
-    connection = sqlite3.connect("database/price_tracker.db")
+    connection = sqlite3.connect(DB_PATH)
     products = connection.execute("SELECT id, url, store FROM products WHERE is_active = 1").fetchall()
 
     async with aiohttp.ClientSession() as session:

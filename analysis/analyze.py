@@ -1,4 +1,5 @@
 import sqlite3
+from config import DB_PATH
 
 recent_days = 7
 drop_threshold = 0.10
@@ -22,7 +23,7 @@ def find_price_drops(connection):
     return drops
 
 if __name__ == "__main__":
-    connection = sqlite3.connect("database/price_tracker.db")
+    connection = sqlite3.connect(DB_PATH)
     drops = find_price_drops(connection)
     connection.close()
     if drops:

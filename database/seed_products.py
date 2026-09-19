@@ -1,6 +1,7 @@
 import sqlite3
+from config import DB_PATH
 
-connection = sqlite3.connect("price_tracker.db")
+connection = sqlite3.connect(DB_PATH)
 connection.execute(
     "INSERT INTO products (name, platform, store, url) VALUES (?, ?, ?, ?)",
     ("اکانت بازی Tekken 8 Advanced Edition", "PS5", "game-center",
