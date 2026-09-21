@@ -3,7 +3,7 @@ create table if not exists products (
     name text not null,
     platform text not null,
     store text,
-    url text not null,
+    url text not null unique,
     is_active integer not null default 1
 );
 
