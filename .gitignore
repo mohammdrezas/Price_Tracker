@@ -19,3 +19,5 @@ __pycache__/
 
 # Windows system files
 Thumbs.db
+
+.pytest_cache/
